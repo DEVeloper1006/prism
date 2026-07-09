@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-base: #141416;
+  --color-panel: #1C1C1F;
+  --color-surface: #232326;
+  --color-accent: #6C5CE7;
+  --color-good: #2ED47A;
+  --color-warning: #FFB347;
+  --color-bad: #FF6B6B;
+  --color-info: #4ECDC4;
+
+  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-surface) transparent;
+}
+
+body {
+  margin: 0;
+  background: var(--color-base);
+  color: #e0e0e0;
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
