@@ -1,4 +1,5 @@
 use rand::RngCore;
+use tauri_plugin_dialog::DialogExt;
 
 #[tauri::command]
 fn get_token(state: tauri::State<'_, AppState>) -> String {
@@ -6,9 +7,13 @@ fn get_token(state: tauri::State<'_, AppState>) -> String {
 }
 
 #[tauri::command]
-async fn open_folder() -> Result<Option<String>, String> {
-    // TODO: use tauri-plugin-dialog to pick a folder
-    Ok(None)
+async fn open_folder(app: tauri::AppHandle) -> Result<Option<String>, String> {
+    let folder = app
+        .dialog()
+        .file()
+        .blocking_pick_folder();
+
+    Ok(folder.map(|p| p.to_string()))
 }
 
 struct AppState {
@@ -25,11 +30,20 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
         .manage(AppState {
-            session_token: token,
+            session_token: token.clone(),
         })
         .invoke_handler(tauri::generate_handler![get_token, open_folder])
-        .setup(|_app| {
-            // TODO: spawn Python sidecar with session token
+        .setup(move |app| {
+            let shell = app.shell();
+            let token_arg = token.clone();
+
+            tauri::async_runtime::spawn(async move {
+                let _ = shell
+                    .command("python3")
+                    .args(["backend/main.py", "--token", &token_arg])
+                    .spawn();
+            });
+
             Ok(())
         })
         .run(tauri::generate_context!())

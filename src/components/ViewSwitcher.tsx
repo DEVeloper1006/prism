@@ -1,4 +1,4 @@
-type View = "browser" | "timeline" | "transcript" | "assembly";
+import type { View } from "../lib/types";
 
 interface ViewSwitcherProps {
   activeView: View;
@@ -10,19 +10,20 @@ const views: { key: View; label: string }[] = [
   { key: "timeline", label: "Timeline" },
   { key: "transcript", label: "Transcript" },
   { key: "assembly", label: "Assembly" },
+  { key: "storyboard", label: "Storyboard" },
 ];
 
 export default function ViewSwitcher({ activeView, onViewChange }: ViewSwitcherProps) {
   return (
-    <nav className="flex gap-1 px-4 py-1 bg-panel border-b border-surface">
+    <nav className="flex gap-1 px-4 py-1 bg-panel border-b border-border shrink-0">
       {views.map((v) => (
         <button
           key={v.key}
           onClick={() => onViewChange(v.key)}
-          className={`px-3 py-1 text-sm rounded transition-colors ${
+          className={`px-3 py-1 text-xs rounded transition-colors ${
             activeView === v.key
-              ? "bg-accent text-white"
-              : "text-gray-400 hover:text-white hover:bg-surface"
+              ? "bg-interactive text-white"
+              : "text-text-secondary hover:text-text-primary hover:bg-surface"
           }`}
         >
           {v.label}
