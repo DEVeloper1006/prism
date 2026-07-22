@@ -22,7 +22,6 @@ class TechnicalTrack:
             return {}
 
         fps = cap.get(cv2.CAP_PROP_FPS) or 24.0
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         sample_interval = max(int(fps), 1)
 
         sharpness_scores: list[float] = []

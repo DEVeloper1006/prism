@@ -1,8 +1,6 @@
 """Track 1: Visual Intelligence — PySceneDetect + OpenCLIP + VLM."""
 
-import json
 import logging
-import subprocess
 from pathlib import Path
 
 import cv2

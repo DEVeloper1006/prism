@@ -1,5 +1,6 @@
 use rand::RngCore;
 use tauri_plugin_dialog::DialogExt;
+use tauri_plugin_shell::ShellExt;
 
 #[tauri::command]
 fn get_token(state: tauri::State<'_, AppState>) -> String {
@@ -34,11 +35,12 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![get_token, open_folder])
         .setup(move |app| {
-            let shell = app.shell();
+            let handle = app.handle().clone();
             let token_arg = token.clone();
 
             tauri::async_runtime::spawn(async move {
-                let _ = shell
+                let _ = handle
+                    .shell()
                     .command("python3")
                     .args(["backend/main.py", "--token", &token_arg])
                     .spawn();
